@@ -22,15 +22,4 @@ class TableRestoModel {
           capacity: json['capacity'],
           tableStatus: json['table_status'],
           status: json['status']);
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'code': code,
-      'name': name,
-      'capacity': capacity,
-      'table_status': tableStatus,
-      'status': status
-    };
-  }
 }
