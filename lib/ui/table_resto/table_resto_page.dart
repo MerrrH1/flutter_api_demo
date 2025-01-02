@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latihan_api_demo/bloc/table/table_resto_bloc.dart';
+import 'package:latihan_api_demo/param/table_resto_param.dart';
 import 'package:latihan_api_demo/responses/table_resto_response.dart';
 import 'package:latihan_api_demo/services/table_resto_service.dart';
 import 'package:latihan_api_demo/ui/table_resto/table_resto_form.dart';
@@ -17,6 +18,7 @@ class _TableRestoPageState extends State<TableRestoPage> {
   TableRestoModel? tableRestoModel;
   final tableService = TableRestoService();
   late Future<TableRestoResponse> futureGetTable;
+  late Future<TableRestoResponse> futureUpdateTable;
   late Future<TableRestoResponse> futureDeleteTable;
   Future<void> _refreshData(BuildContext context) async {
     context.read<TableRestoBloc>().add(LoadTableResto());
@@ -121,7 +123,9 @@ class _TableRestoPageState extends State<TableRestoPage> {
                                                 child: Text('Batal')),
                                             TextButton(
                                               onPressed: () {
-                                                futureDeleteTable = tableService.deleteTable(data[index].id);
+                                                futureDeleteTable =
+                                                    tableService.deleteTable(
+                                                        data[index].id);
                                                 Navigator.of(context).pop();
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(SnackBar(
@@ -139,12 +143,36 @@ class _TableRestoPageState extends State<TableRestoPage> {
                                       })
                                 }
                               else if (value == "order")
-                                {}
+                                {
+                                  futureUpdateTable = tableService.updateTable(
+                                      data[index].id,
+                                      TableRestoParam(
+                                          code: data[index].code,
+                                          name: data[index].name,
+                                          capacity: data[index].capacity,
+                                          tableStatus: "Terisi",
+                                          status: data[index].status)),
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text('Berhasil memesan meja'),
+                                    backgroundColor: Colors.green,
+                                  ))
+                                }
                               else if (value == "cancel")
                                 {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text("Membatalkan meja")))
+                                  futureUpdateTable = tableService.updateTable(
+                                      data[index].id,
+                                      TableRestoParam(
+                                          code: data[index].code,
+                                          name: data[index].name,
+                                          capacity: data[index].capacity,
+                                          tableStatus: "Kosong",
+                                          status: data[index].status)),
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text('Berhasil membatalkan meja'),
+                                    backgroundColor: Colors.green,
+                                  ))
                                 }
                             },
                           ));
