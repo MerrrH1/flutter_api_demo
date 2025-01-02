@@ -43,4 +43,11 @@ class TableRestoService {
       throw('Failed to update table : ${e.toString()}');
     }
   }
+
+  Future<TableRestoResponse> deleteTable(int id) async {
+    try {
+      final response = await dio.delete('/table_resto/$id');
+      return TableRestoResponse.fromJson(response.data);
+    } on DioException catch(e) {throw('Failed to delete table : ${e.toString}');}
+  }
 }

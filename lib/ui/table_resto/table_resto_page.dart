@@ -4,7 +4,6 @@ import 'package:latihan_api_demo/bloc/table/table_resto_bloc.dart';
 import 'package:latihan_api_demo/responses/table_resto_response.dart';
 import 'package:latihan_api_demo/services/table_resto_service.dart';
 import 'package:latihan_api_demo/ui/table_resto/table_resto_form.dart';
-
 import '../../models/table_resto_model.dart';
 
 class TableRestoPage extends StatefulWidget {
@@ -16,7 +15,9 @@ class TableRestoPage extends StatefulWidget {
 
 class _TableRestoPageState extends State<TableRestoPage> {
   TableRestoModel? tableRestoModel;
+  final tableService = TableRestoService();
   late Future<TableRestoResponse> futureGetTable;
+  late Future<TableRestoResponse> futureDeleteTable;
   Future<void> _refreshData(BuildContext context) async {
     context.read<TableRestoBloc>().add(LoadTableResto());
   }
@@ -105,14 +106,40 @@ class _TableRestoPageState extends State<TableRestoPage> {
                                 }
                               else if (value == "delete")
                                 {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text('Menghapus meja')))
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('Konfirmasi'),
+                                          content: Text(
+                                              'Apakah anda ingin menghapus meja ini?'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Batal')),
+                                            TextButton(
+                                              onPressed: () {
+                                                futureDeleteTable = tableService.deleteTable(data[index].id);
+                                                Navigator.of(context).pop();
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      'Meja berhasil dihapus!'),
+                                                  backgroundColor: Colors.green,
+                                                ));
+                                              },
+                                              style: TextButton.styleFrom(
+                                                  backgroundColor: Colors.red),
+                                              child: Text('Hapus'),
+                                            )
+                                          ],
+                                        );
+                                      })
                                 }
                               else if (value == "order")
-                                {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("Memesan meja")))
-                                }
+                                {}
                               else if (value == "cancel")
                                 {
                                   ScaffoldMessenger.of(context).showSnackBar(
