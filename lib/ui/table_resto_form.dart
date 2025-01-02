@@ -36,64 +36,68 @@ class _TableRestoFormState extends State<TableRestoForm> {
             : "Form Update Table"),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: tecName,
-              decoration: InputDecoration(
-                  label: Text(
-                    'Nama meja : ',
-                  ),
-                  hintText: "Masukkan nama meja"),
-              validator: (value) =>
-                  value == null || value.isEmpty ? "Masukkan nama meja" : null,
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: tecCode,
-              decoration: InputDecoration(
-                  label: Text(
-                    'Kode meja : ',
-                  ),
-                  hintText: "Masukkan kode meja"),
-              validator: (value) =>
-                  value == null || value.isEmpty ? "Masukkan kode meja" : null,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              controller: tecCapacity,
-              decoration: InputDecoration(
-                  label: Text(
-                    'Kapasitas meja : ',
-                  ),
-                  hintText: "Masukkan kapasitas meja"),
-              validator: (value) => value == null || value.isEmpty
-                  ? "Masukkan kapasitas meja"
-                  : null,
-              keyboardType: TextInputType.number,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            OverflowBar(
-              alignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(onPressed: () {
-                  if(globalKey.currentState!.validate()) {
-                    futureTableCreate = tableServices.addTable(TableRestoParam(code: tecCode.text.isNotEmpty ? tecCode.text : "Kode Default", name: tecName.text.isNotEmpty ? tecName.text : "Nama Default", capacity: int.parse(tecCapacity.text).isNaN ? 10 : int.parse(tecCapacity.text)));
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Data berhasil disimpan')));
-                  }
-                }, child: Text('Simpan')),
-                OutlinedButton(onPressed: () {
-                  Navigator.pop(context);
-                }, child: Text('Batal'))
-              ],
-            )
-          ],
+      body: Form(
+        key: globalKey,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: tecName,
+                decoration: InputDecoration(
+                    label: Text(
+                      'Nama meja : ',
+                    ),
+                    hintText: "Masukkan nama meja"),
+                validator: (value) =>
+                    value == null || value.isEmpty ? "Masukkan nama meja" : null,
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: tecCode,
+                decoration: InputDecoration(
+                    label: Text(
+                      'Kode meja : ',
+                    ),
+                    hintText: "Masukkan kode meja"),
+                validator: (value) =>
+                    value == null || value.isEmpty ? "Masukkan kode meja" : null,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: tecCapacity,
+                decoration: InputDecoration(
+                    label: Text(
+                      'Kapasitas meja : ',
+                    ),
+                    hintText: "Masukkan kapasitas meja"),
+                validator: (value) => value == null || value.isEmpty
+                    ? "Masukkan kapasitas meja"
+                    : null,
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              OverflowBar(
+                alignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(onPressed: () {
+                    if(globalKey.currentState!.validate()) {
+                      futureTableCreate = tableServices.addTable(TableRestoParam(code: tecCode.text, name: tecName.text, capacity: int.parse(tecCapacity.text)));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Data berhasil disimpan')));
+                      Navigator.pop(context);
+                    }
+                  }, child: Text('Simpan')),
+                  OutlinedButton(onPressed: () {
+                    Navigator.pop(context);
+                  }, child: Text('Batal'))
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
