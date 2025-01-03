@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:latihan_api_demo/param/table_resto_param.dart';
 import 'package:latihan_api_demo/responses/table_resto_response.dart';
 
@@ -9,7 +8,6 @@ class TableRestoService {
   Future<TableRestoResponse> getTables() async {
     try {
       final response = await dio.get('/table_resto');
-      debugPrint('Response : ${response.data['data']}');
       return TableRestoResponse.fromJson(response.data);
     } on DioException catch(e) {
       throw('Failed to fetch table : ${e.toString()}');
@@ -28,7 +26,6 @@ class TableRestoService {
   Future<TableRestoResponse> getTableById(int id) async {
     try {
       final response = await dio.get('/table_resto/$id');
-      debugPrint('Response : ${response.data['data']['id']}');
       return TableRestoResponse.fromJson(response.data);
     } on DioException catch(e) {
       throw('Failed to get table : ${e.toString()}');
